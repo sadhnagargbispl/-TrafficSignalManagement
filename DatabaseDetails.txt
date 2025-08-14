@@ -6,12 +6,12 @@
 --  PasswordHash NVARCHAR(200) NOT NULL,
 --  IsActive BIT NOT NULL DEFAULT(1)
 --);
---INSERT INTO dbo.Users (Username, PasswordHash) VALUES ('admin','{SHA256_OF_password}');
+--INSERT INTO dbo.Users (Username, PasswordHash) VALUES ('admin','123456');
 --select * from Users
 --update Users set PasswordHash = 123456
 --CREATE TABLE dbo.GlobalConfig (
 --  Id INT IDENTITY PRIMARY KEY,
---  Direction NVARCHAR(20) NOT NULL,   -- Clockwise | Anti Clock wise | Up & Down | Left & Right
+--  Direction NVARCHAR(20) NOT NULL,
 --  IntervalSeconds INT NOT NULL CHECK (IntervalSeconds BETWEEN 1 AND 300),
 --  UpdatedAt DATETIME NOT NULL DEFAULT GETDATE()
 --);

@@ -5,15 +5,20 @@ Partial Class TrafficAnalyzer
     Inherits System.Web.UI.Page
     Dim constr As String = ConfigurationManager.ConnectionStrings("AppDb").ConnectionString
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
-        Dim sql = "SELECT TOP(1) Direction, IntervalSeconds FROM dbo.GlobalConfig ORDER BY UpdatedAt DESC"
-        Dim dtMember As DataTable = SqlHelper.ExecuteDataset(constr, CommandType.Text, sql).Tables(0)
-        If dtMember.Rows.Count > 0 Then
-            DirectionText = dtMember.Rows(0)("Direction").ToString()
-            IntervalSeconds = Convert.ToInt32(dtMember.Rows(0)("IntervalSeconds"))
+        If Session("Status") = "OK" Then
+            Dim sql = "SELECT TOP(1) Direction, IntervalSeconds FROM dbo.GlobalConfig ORDER BY UpdatedAt DESC"
+            Dim dtMember As DataTable = SqlHelper.ExecuteDataset(constr, CommandType.Text, sql).Tables(0)
+            If dtMember.Rows.Count > 0 Then
+                DirectionText = dtMember.Rows(0)("Direction").ToString()
+                IntervalSeconds = Convert.ToInt32(dtMember.Rows(0)("IntervalSeconds"))
+            Else
+                DirectionText = "Clockwise"
+                IntervalSeconds = 10
+            End If
         Else
-            DirectionText = "Clockwise"
-            IntervalSeconds = 10
+            Response.Redirect("login.aspx")
         End If
+       
     End Sub
     Private IntervalSecondsS As Integer
     Public Property IntervalSeconds() As Integer

@@ -12,6 +12,7 @@ Partial Class Login
                 Dim token = "v8yG5Qz3kP1wN9fS2xL7aR0mH6jB4uD1eT3cF5vK8pZ2qX0rY1sM7nG4hJ9bL6w"
                 Dim c = New HttpCookie("auth_token", token) With {.HttpOnly = True, .Secure = False}
                 Response.Cookies.Add(c)
+                Session("Status") = "OK"
                 Response.Redirect("GlobalConfiguration.aspx")
                 Return
             Else

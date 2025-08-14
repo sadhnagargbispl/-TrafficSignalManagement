@@ -5,7 +5,12 @@ Partial Class GlobalConfiguration
     Inherits System.Web.UI.Page
     Dim constr As String = ConfigurationManager.ConnectionStrings("AppDb").ConnectionString
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
-        If Not IsPostBack Then LoadExisting()
+        If Session("Status") = "OK" Then
+            If Not IsPostBack Then LoadExisting()
+        Else
+            Response.Redirect("login.aspx")
+        End If
+
     End Sub
     Private Sub LoadExisting()
         Try
