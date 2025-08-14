@@ -50,11 +50,8 @@
 
 <script type="text/javascript">
 debugger ;
-  // ----- CONFIG coming from code-behind -----
-  var intervalSec = <%= IntervalSeconds %>;      // e.g., 15
-  var direction = "<%= DirectionText %>";        // "Clockwise" | "Anti Clock wise" | "Up & Down" | "Left & Right"
-
-  // ----- SEQUENCES exactly as spec -----
+  var intervalSec = <%= IntervalSeconds %>;
+  var direction = "<%= DirectionText %>"; 
   var sequences = {
     "Clockwise": ["A","B","C","D"],
     "Anti Clock wise": ["A","D","C","B"],
@@ -62,13 +59,9 @@ debugger ;
     "Left & Right": ["B","D"]
   };
   var seq = sequences[direction] || ["A","B","C","D"];
-
-  // ----- STATE -----
-  var idx = 0;                 // current index in seq
-  var remaining = intervalSec; // shows Interval -> 0
+  var idx = 0;
+  var remaining = intervalSec;
   var timerId = null;
-
-  // Helper: set panel colors & labels
   function setSignal(openId) {
     ["A","B","C","D"].forEach(function(s){
       var el = document.getElementById("sig"+s);
@@ -80,62 +73,44 @@ debugger ;
     var next = seq[(seq.indexOf(openId)+1) % seq.length];
     document.getElementById("lblNext").textContent = next;
   }
-
-  // Tick exactly like PDF: Remaining counts down, Time counts up
   function renderHeader(){
-    var elapsed = intervalSec - remaining; // 0..Interval
+    var elapsed = intervalSec - remaining;
     document.getElementById("lblTime").textContent = elapsed;
     document.getElementById("lblRemain").textContent = remaining;
   }
-
   function advanceTo(index){
     idx = index;
-    remaining = intervalSec;   // reset as soon as we switch
+    remaining = intervalSec;
     setSignal(seq[idx]);
     renderHeader();
   }
-
   function nextStep(){
     idx = (idx + 1) % seq.length;
     remaining = intervalSec;
     setSignal(seq[idx]);
   }
-
   function tick(){
-    // first render current values
     renderHeader();
-
-    // then count down; when it hits 0, show 0 for this tick, next tick will advance
     remaining--;
-
     if (remaining < 0){
       nextStep();
-      renderHeader();  // reflect the immediate switch
-      // after switching, set remaining to Interval-1 so user sees Interval next second
+      renderHeader(); 
       remaining = intervalSec - 1;
     }
   }
-
-  // Ambulance: open immediately, reset timer, continue normal order after
   function ambulance(which){
     var targetIndex = seq.indexOf(which);
     if (targetIndex === -1) return;
-    advanceTo(targetIndex);   // instant open + full interval reset
+    advanceTo(targetIndex);
   }
-
-  // Expose for buttons
   window.ambulance = ambulance;
-
   window.onload = function(){
     document.getElementById("lblDirection").textContent = direction;
-    // Initial paint
     advanceTo(0);
-    // Start timer
     if (timerId) clearInterval(timerId);
     timerId = setInterval(tick, 1000);
   };
 </script>
-
 </form>
 </body>
 </html>
